@@ -16,8 +16,6 @@
 """
 Highest level code for module.
 """
-import decimal
-
 import justbases
 
 from justoptions_gui import Config
@@ -85,4 +83,59 @@ class MiscDisplayConfig(Config):
     _FIELD_MAP = {
        "show_approx_str":
           ("Indicate if value is approximate?", JustSelector(bool))
+    }
+
+
+class ValueFields(object):
+    """
+    Class to hold the fields contained by the value widget.
+    """
+    # pylint: disable=too-few-public-methods
+
+    def __init__(
+        self,
+        base=10,
+        precision=2,
+        rounding_method=justbases.RoundingMethods.ROUND_HALF_ZERO
+    ):
+        """
+        Initializers.
+
+        :param int base: the base
+        :param int precision: the precision
+        :param rounding_method: the rounding method
+        :type rounding_method: one of RoundingMethods.METHODS()
+        """
+        self.base = base
+        self.precision = precision
+        self.rounding_method = rounding_method
+
+
+class ValueConfig(Config):
+    """
+    Configuration for choosing the value to display.
+    """
+    # pylint: disable=too-few-public-methods
+
+    CONFIG = ValueFields()
+
+    _FIELD_MAP = {
+       "base": ("Base:", JustSelector(int)),
+       "precision":
+          (
+             "Maximum number of digits right of radix:",
+             MaybeSelector(JustSelector(int))
+          ),
+       "rounding_method":
+          (
+             "Rounding method:",
+             ChoiceSelector([
+                (justbases.RoundingMethods.ROUND_DOWN, "down"),
+                (justbases.RoundingMethods.ROUND_HALF_DOWN, "half down"),
+                (justbases.RoundingMethods.ROUND_HALF_UP, "half up"),
+                (justbases.RoundingMethods.ROUND_HALF_ZERO, "half 0"),
+                (justbases.RoundingMethods.ROUND_TO_ZERO, "to 0"),
+                (justbases.RoundingMethods.ROUND_UP, "up")
+             ])
+          )
     }

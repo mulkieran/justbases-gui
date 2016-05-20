@@ -20,10 +20,14 @@ import Tkinter
 
 import justbases
 
+import justoptions_gui
+
 from ._config import BaseConfig
 from ._config import DigitsConfig
 from ._config import MiscDisplayConfig
 from ._config import StripConfig
+from ._config import ValueConfig
+from ._config import ValueFields
 
 
 class RationalFrame(Tkinter.Frame):
@@ -89,6 +93,9 @@ class RationalFrame(Tkinter.Frame):
         error = Tkinter.Label(self, textvariable=self.ERROR_STR, fg="red")
         error.pack({"side": "top"})
 
+        self.VALUE = ValueConfig(self, "Value")
+        self.VALUE.widget.pack({"side": "left"})
+
         display = Tkinter.LabelFrame(self, text="Display")
         display.pack({"side": "left"})
 
@@ -110,6 +117,7 @@ class RationalFrame(Tkinter.Frame):
         self.DIGITS.set(display_config.digits_config)
         self.STRIP.set(display_config.strip_config)
         self.MISC.set(display_config)
+        self.VALUE.set(ValueFields())
 
         self.show()
 
@@ -129,13 +137,19 @@ class RationalFrame(Tkinter.Frame):
                strip_config=strip_config,
                **self.MISC.get()
             )
+            value_options = self.VALUE.get()
         except (justoptions_gui.GUIError, justbases.BasesError) as err:
             self.ERROR_STR.set(err)
             return
 
         try:
-            radix, _ = justbases.Radices.from_rational(self.value, 10, None)
-            self.DISPLAY_STR.set(radix.getString(display_config, 0))
+            radix, relation = justbases.Radices.from_rational(
+               self.value,
+               value_options['base'],
+               value_options['precision'],
+               value_options['rounding_method']
+            )
+            self.DISPLAY_STR.set(radix.getString(display_config, relation))
         except justbases.BasesError as err:
             self.ERROR_STR.set(err)
             return
@@ -150,7 +164,7 @@ def show(a_range):
     :param Range a_range: the range to display
     """
     root = Tkinter.Tk()
-    root.wm_title("Justbytes Range Viewer")
+    root.wm_title("Justbases Rational Viewer")
     frame = RationalFrame(master=root)
     frame.value = a_range
     frame.show()
