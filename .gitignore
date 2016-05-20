@@ -7,5 +7,5 @@ htmlcov
 *.swp
 *.egg-info
 doc/_build
-doc/justbytes_gui
+doc/justbases_gui
 doc/tests
