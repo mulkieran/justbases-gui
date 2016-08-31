@@ -24,7 +24,6 @@ import justoptions_gui
 
 from ._config import BaseConfig
 from ._config import DigitsConfig
-from ._config import MiscDisplayConfig
 from ._config import StripConfig
 from ._config import ValueConfig
 from ._config import ValueFields
@@ -105,8 +104,6 @@ class RationalFrame(Tkinter.Frame):
         self.DIGITS.widget.pack({"side": "top"})
         self.STRIP = StripConfig(display, "Strip Options")
         self.STRIP.widget.pack({"side": "top"})
-        self.MISC = MiscDisplayConfig(display, "Miscellaneous Display Options")
-        self.MISC.widget.pack({"side": "top"})
 
     def reset(self):
         """
@@ -116,7 +113,6 @@ class RationalFrame(Tkinter.Frame):
         self.BASE.set(display_config.base_config)
         self.DIGITS.set(display_config.digits_config)
         self.STRIP.set(display_config.strip_config)
-        self.MISC.set(display_config)
         self.VALUE.set(ValueFields())
 
         self.show()
@@ -132,10 +128,10 @@ class RationalFrame(Tkinter.Frame):
             digits_config = justbases.DigitsConfig(**self.DIGITS.get())
             strip_config = justbases.StripConfig(**self.STRIP.get())
             display_config = justbases.DisplayConfig(
+               approx_config=justbases.ApproxConfig(),
                base_config=base_config,
                digits_config=digits_config,
-               strip_config=strip_config,
-               **self.MISC.get()
+               strip_config=strip_config
             )
             value_options = self.VALUE.get()
         except (justoptions_gui.GUIError, justbases.BasesError) as err:

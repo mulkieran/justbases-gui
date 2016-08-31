@@ -72,20 +72,6 @@ class DigitsConfig(Config):
     }
 
 
-class MiscDisplayConfig(Config):
-    """
-    Miscellaneous display options.
-    """
-    # pylint: disable=too-few-public-methods
-
-    CONFIG = justbases.BasesConfig.DISPLAY_CONFIG
-
-    _FIELD_MAP = {
-       "show_approx_str":
-          ("Indicate if value is approximate?", JustSelector(bool))
-    }
-
-
 class ValueFields(object):
     """
     Class to hold the fields contained by the value widget.
