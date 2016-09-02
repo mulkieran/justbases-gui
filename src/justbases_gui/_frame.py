@@ -20,6 +20,8 @@ import Tkinter
 
 import justbases
 
+import justbases_string
+
 import justoptions_gui
 
 from ._config import BaseConfig
@@ -123,32 +125,33 @@ class RationalFrame(Tkinter.Frame):
         """
         self.VALUE_STR.set(str(self.value))
 
-        try:
-            base_config = justbases.BaseConfig(**self.BASE.get())
-            digits_config = justbases.DigitsConfig(**self.DIGITS.get())
-            strip_config = justbases.StripConfig(**self.STRIP.get())
-            display_config = justbases.DisplayConfig(
-               approx_config=justbases.ApproxConfig(),
-               base_config=base_config,
-               digits_config=digits_config,
-               strip_config=strip_config
-            )
-            value_options = self.VALUE.get()
-        except (justoptions_gui.GUIError, justbases.BasesError) as err:
-            self.ERROR_STR.set(err)
-            return
+        approx_config = justbases_string.ApproxConfig()
+        base_config = justbases_string.BaseConfig(**self.BASE.get())
+        digits_config = justbases_string.DigitsConfig(**self.DIGITS.get())
+        strip_config = justbases_string.StripConfig(**self.STRIP.get())
+        display_config = justbases_string.DisplayConfig(
+           approx_config=approx_config,
+           base_config=base_config,
+           digits_config=digits_config,
+           strip_config=strip_config
+        )
+        value_options = self.VALUE.get()
 
-        try:
-            radix, relation = justbases.Radices.from_rational(
-               self.value,
-               value_options['base'],
-               value_options['precision'],
-               value_options['rounding_method']
-            )
-            self.DISPLAY_STR.set(radix.getString(display_config, relation))
-        except justbases.BasesError as err:
-            self.ERROR_STR.set(err)
-            return
+        radix, relation = justbases.Radices.from_rational(
+           self.value,
+           value_options['base'],
+           value_options['precision'],
+           value_options['rounding_method']
+        )
+        displayer = justbases_string.String(display_config, radix.base)
+        display_value = displayer.xform(
+           radix.sign,
+           radix.integer_part,
+           radix.non_repeating_part,
+           radix.repeating_part,
+           relation
+        )
+        self.DISPLAY_STR.set(display_value)
 
         self.ERROR_STR.set("")
 
