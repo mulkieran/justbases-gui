@@ -30,7 +30,7 @@ class BaseConfig(Config):
     """
     # pylint: disable=too-few-public-methods
 
-    CONFIG = justbases.BasesConfig.DISPLAY_CONFIG.base_config
+    CONFIG = justbases.Radix.STR_CONFIG.base_config
 
     _FIELD_MAP = {
        "use_prefix": ("Display base prefix?", JustSelector(bool)),
@@ -44,7 +44,7 @@ class StripConfig(Config):
     """
     # pylint: disable=too-few-public-methods
 
-    CONFIG = justbases.BasesConfig.DISPLAY_CONFIG.strip_config
+    CONFIG = justbases.Radix.STR_CONFIG.strip_config
 
     _FIELD_MAP = {
        "strip": ("Strip all trailing zeros?", JustSelector(bool)),
@@ -63,26 +63,12 @@ class DigitsConfig(Config):
     """
     # pylint: disable=too-few-public-methods
 
-    CONFIG = justbases.BasesConfig.DISPLAY_CONFIG.digits_config
+    CONFIG = justbases.Radix.STR_CONFIG.digits_config
 
     _FIELD_MAP = {
        "separator": ("Separator:", JustSelector(str)),
        "use_caps": ("Use capital letters?", JustSelector(bool)),
        "use_letters": ("Use letters for digits?", JustSelector(bool))
-    }
-
-
-class MiscDisplayConfig(Config):
-    """
-    Miscellaneous display options.
-    """
-    # pylint: disable=too-few-public-methods
-
-    CONFIG = justbases.BasesConfig.DISPLAY_CONFIG
-
-    _FIELD_MAP = {
-       "show_approx_str":
-          ("Indicate if value is approximate?", JustSelector(bool))
     }
 
 
